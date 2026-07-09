@@ -1,0 +1,66 @@
+{
+  "invariant_checks": {
+    "pageviews_srm": {
+      "n_control": 345543,
+      "n_treatment": 344660,
+      "observed_ratio_treatment": 0.49936,
+      "expected_ratio_treatment": 0.5,
+      "chi2_statistic": 1.1297,
+      "p_value": 0.2878496417065941,
+      "srm_detected": "False",
+      "threshold": 0.001
+    },
+    "clicks_srm": {
+      "n_control": 28378,
+      "n_treatment": 28325,
+      "observed_ratio_treatment": 0.49953,
+      "expected_ratio_treatment": 0.5,
+      "chi2_statistic": 0.0495,
+      "p_value": 0.8238677039815409,
+      "srm_detected": "False",
+      "threshold": 0.001
+    }
+  },
+  "srm_detected": "False",
+  "evaluation_window_days": 23,
+  "primary_metric": {
+    "metric": "gross_conversion_primary",
+    "rate_treatment": 0.19832,
+    "rate_control": 0.21887,
+    "absolute_diff": -0.02055,
+    "relative_diff_pct": -9.391,
+    "ci_95_absolute": [
+      -0.02912,
+      -0.01199
+    ],
+    "z_stat": -4.7018,
+    "p_value": 2.578401033720593e-06,
+    "p_value_holm_adjusted": 5e-06,
+    "significant_after_correction": true
+  },
+  "guardrails": {
+    "net_conversion": {
+      "metric": "net_conversion_guardrail",
+      "rate_treatment": 0.11269,
+      "rate_control": 0.11756,
+      "absolute_diff": -0.00487,
+      "relative_diff_pct": -4.146,
+      "ci_95_absolute": [
+        -0.0116,
+        0.00186
+      ],
+      "z_stat": -1.4192,
+      "p_value": 0.15584068262150205,
+      "p_value_holm_adjusted": 0.155841,
+      "significant_after_correction": false
+    }
+  },
+  "decision": {
+    "decision": "INCONCLUSIVE \u2014 HOLD (gross conversion effect confirmed, net conversion effect unresolved)",
+    "reasons": [
+      "Gross conversion decreased significantly as intended (filtering out low-commitment enrollments).",
+      "Net conversion point estimate also decreased but was NOT statistically significant after correction \u2014 however the confidence interval is wide enough that a real negative effect on paying customers cannot be ruled out.",
+      "Recommendation: this is a genuine 'insufficient evidence' case, not a clean ship or no-ship. Extend the test or run a follow-up with a tighter practical-significance boundary on net conversion before launching broadly."
+    ]
+  }
+}

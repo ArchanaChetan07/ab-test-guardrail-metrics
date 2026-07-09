@@ -1,0 +1,65 @@
+{
+  "data_quality_note": {
+    "outlier_rows_removed_for_engagement_metric": 1,
+    "reason": "sum_gamerounds=49,854 for a single user is >5,700x the median and consistent with a known bot/logging artifact; excluded only from the engagement (game rounds) guardrail calculation."
+  },
+  "srm_check": {
+    "n_control": 44700,
+    "n_treatment": 45489,
+    "observed_ratio_treatment": 0.50437,
+    "expected_ratio_treatment": 0.5,
+    "chi2_statistic": 6.9024,
+    "p_value": 0.008607987810836262,
+    "srm_detected": "False",
+    "threshold": 0.001
+  },
+  "primary_metric": {
+    "metric": "retention_7_primary",
+    "rate_treatment": 0.182,
+    "rate_control": 0.1902,
+    "absolute_diff": -0.0082,
+    "relative_diff_pct": -4.312,
+    "ci_95_absolute": [
+      -0.01328,
+      -0.00312
+    ],
+    "z_stat": -3.1644,
+    "p_value": 0.001554249975614329,
+    "p_value_holm_adjusted": 0.004663,
+    "significant_after_correction": true
+  },
+  "guardrails": {
+    "retention_1": {
+      "metric": "retention_1_guardrail",
+      "rate_treatment": 0.44228,
+      "rate_control": 0.44819,
+      "absolute_diff": -0.00591,
+      "relative_diff_pct": -1.318,
+      "ci_95_absolute": [
+        -0.01239,
+        0.00058
+      ],
+      "z_stat": -1.7841,
+      "p_value": 0.07440965529691913,
+      "p_value_holm_adjusted": 0.148819,
+      "significant_after_correction": false
+    },
+    "game_rounds_engagement": {
+      "metric": "game_rounds_guardrail",
+      "mean_treatment": 51.2988,
+      "mean_control": 51.3421,
+      "absolute_diff": -0.0433,
+      "relative_diff_pct": -0.084,
+      "t_stat": -0.0634,
+      "p_value": 0.949468621546446,
+      "p_value_holm_adjusted": 0.949469,
+      "significant_after_correction": false
+    }
+  },
+  "decision": {
+    "decision": "DO NOT SHIP \u2014 REVERT TO GATE AT LEVEL 30",
+    "reasons": [
+      "Primary metric (7-day retention) moved in the WRONG direction (treatment lower than control) and is statistically significant \u2014 this is a significant regression, not just a null result."
+    ]
+  }
+}

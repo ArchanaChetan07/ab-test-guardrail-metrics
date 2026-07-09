@@ -1,0 +1,78 @@
+{
+  "raw_rows": 294478,
+  "srm_check_raw_group_sizes": {
+    "n_control": 147202,
+    "n_treatment": 147276,
+    "observed_ratio_treatment": 0.50013,
+    "expected_ratio_treatment": 0.5,
+    "chi2_statistic": 0.0186,
+    "p_value": 0.8915321515063552,
+    "srm_detected": "False",
+    "threshold": 0.001
+  },
+  "data_quality_gate": {
+    "mismatched_group_page_rows": 3893,
+    "mismatched_pct": 1.322,
+    "rows_involved_in_duplicate_user_ids": 7788,
+    "verdict": "FAIL \u2014 group/page assignment logging bug detected; SRM on raw counts alone would have missed this.",
+    "action_taken": "Removed all mismatched rows, then dropped any remaining duplicate user_id (kept first occurrence). This is a data-cleaning decision made BEFORE looking at the conversion outcome, based purely on assignment integrity, to avoid the appearance of cherry-picking rows that support a particular result."
+  },
+  "clean_rows": 290584,
+  "rows_dropped_total": 3894,
+  "rows_dropped_pct": 1.322,
+  "srm_check_post_cleaning": {
+    "n_control": 145274,
+    "n_treatment": 145310,
+    "observed_ratio_treatment": 0.50006,
+    "expected_ratio_treatment": 0.5,
+    "chi2_statistic": 0.0045,
+    "p_value": 0.9467543681597944,
+    "srm_detected": "False",
+    "threshold": 0.001
+  },
+  "primary_metric": {
+    "metric": "conversion_rate_primary",
+    "rate_treatment": 0.11881,
+    "rate_control": 0.12039,
+    "absolute_diff": -0.00158,
+    "relative_diff_pct": -1.311,
+    "ci_95_absolute": [
+      -0.00394,
+      0.00078
+    ],
+    "z_stat": -1.3109,
+    "p_value": 0.18988337448195103
+  },
+  "guardrails": "None available \u2014 dataset does not include revenue, refund, or support-contact fields. Documented as a limitation rather than fabricating a guardrail from data that doesn't exist.",
+  "daily_relative_lift": {
+    "2017-01-02": -0.0454,
+    "2017-01-03": -0.0002,
+    "2017-01-04": -0.0432,
+    "2017-01-05": -0.0669,
+    "2017-01-06": 0.0703,
+    "2017-01-07": -0.0395,
+    "2017-01-08": 0.0156,
+    "2017-01-09": -0.0132,
+    "2017-01-10": 0.1194,
+    "2017-01-11": -0.0318,
+    "2017-01-12": 0.0024,
+    "2017-01-13": -0.0484,
+    "2017-01-14": -0.0591,
+    "2017-01-15": -0.0584,
+    "2017-01-16": -0.0218,
+    "2017-01-17": 0.0357,
+    "2017-01-18": -0.0001,
+    "2017-01-19": -0.0228,
+    "2017-01-20": 0.0212,
+    "2017-01-21": -0.0813,
+    "2017-01-22": -0.0097,
+    "2017-01-23": -0.0367,
+    "2017-01-24": 0.0313
+  },
+  "decision": {
+    "decision": "DO NOT SHIP \u2014 keep old page",
+    "reasons": [
+      "Conversion rate difference not statistically significant (p=0.190), and the point estimate is actually slightly NEGATIVE for the new page. No evidence the redesign helps."
+    ]
+  }
+}

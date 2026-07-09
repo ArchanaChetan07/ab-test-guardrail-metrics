@@ -1,0 +1,22 @@
+{
+  "primary_metric": "checkout_conversion_rate",
+  "baseline_conversion_rate": 0.062,
+  "true_relative_lift": 0.08,
+  "pre_registered_mde": 0.08,
+  "guardrails": {
+    "average_order_value": {
+      "true_relative_effect": 0.0
+    },
+    "refund_rate_14d": {
+      "true_relative_effect": 0.0
+    },
+    "support_contact_rate_7d": {
+      "true_absolute_effect_pp": 0.004
+    }
+  },
+  "novelty_effect": {
+    "day1_multiplier": 1.4,
+    "decays_to_steady_state_by_day": 10
+  },
+  "note": "This file is the answer key used ONLY to validate the analysis pipeline. In the deliverables, the analysis is written as if ground truth were unknown, exactly as it would be with real data."
+}

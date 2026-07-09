@@ -1,0 +1,133 @@
+{
+  "srm_check": {
+    "n_control": 51360,
+    "n_treatment": 51350,
+    "ratio_treatment": 0.5,
+    "chi2_statistic": 0.001,
+    "p_value": 0.9751078030311983,
+    "srm_detected": false,
+    "threshold": 0.001
+  },
+  "primary_metric": {
+    "metric": "checkout_conversion_rate",
+    "control_rate": 0.06092,
+    "treatment_rate": 0.06647,
+    "absolute_diff": 0.00554,
+    "relative_diff_pct": 9.098,
+    "ci_95_absolute": [
+      0.00256,
+      0.00853
+    ],
+    "z_stat": 3.6369,
+    "p_value": 0.0002759775125614475,
+    "p_value_holm_adjusted": 0.000828,
+    "significant_after_correction": true
+  },
+  "guardrails": {
+    "average_order_value": {
+      "metric": "average_order_value",
+      "control_mean": 68.23,
+      "treatment_mean": 68.6,
+      "absolute_diff": 0.37,
+      "relative_diff_pct": 0.536,
+      "t_stat": 0.6238,
+      "p_value": 0.5327733405256755,
+      "guardrail_rule": "flag if treatment mean drops more than 2% relative",
+      "p_value_holm_adjusted": 0.657101,
+      "significant_after_correction": false
+    },
+    "refund_rate_14d": {
+      "metric": "refund_rate_14d",
+      "control_rate": 0.00276,
+      "treatment_rate": 0.00245,
+      "absolute_diff_pp": -0.031,
+      "z_stat": -0.977,
+      "p_value": 0.3285507353854892,
+      "p_value_holm_adjusted": 0.657101,
+      "significant_after_correction": false
+    },
+    "support_contact_rate_7d": {
+      "metric": "support_contact_rate_7d",
+      "control_rate": 0.0184,
+      "treatment_rate": 0.02273,
+      "absolute_diff_pp": 0.433,
+      "z_stat": 4.8856,
+      "p_value": 1.0310326668134327e-06,
+      "p_value_holm_adjusted": 4e-06,
+      "significant_after_correction": true
+    }
+  },
+  "novelty_check": {
+    "early_window_days": "1-10",
+    "late_window_days": "11-28",
+    "early_relative_lift_pct": 4.92,
+    "late_relative_lift_pct": 11.53,
+    "novelty_gap_pp": -6.61,
+    "daily_lift_series": {
+      "1": 0.1532,
+      "2": 0.0729,
+      "3": 0.2522,
+      "4": 0.1404,
+      "5": -0.0672,
+      "6": 0.012,
+      "7": 0.1625,
+      "8": -0.0449,
+      "9": -0.0636,
+      "10": -0.0488,
+      "11": 0.2669,
+      "12": 0.1228,
+      "13": 0.2904,
+      "14": 0.3035,
+      "15": 0.1112,
+      "16": 0.1186,
+      "17": 0.0426,
+      "18": 0.0295,
+      "19": -0.0257,
+      "20": 0.1482,
+      "21": 0.0498,
+      "22": -0.0889,
+      "23": -0.0969,
+      "24": 0.2361,
+      "25": 0.2492,
+      "26": 0.3272,
+      "27": 0.1726,
+      "28": 0.0136
+    },
+    "daily_lift_series_3d_smoothed": {
+      "1": 0.113,
+      "2": 0.1594,
+      "3": 0.1552,
+      "4": 0.1085,
+      "5": 0.0284,
+      "6": 0.0358,
+      "7": 0.0432,
+      "8": 0.018,
+      "9": -0.0524,
+      "10": 0.0515,
+      "11": 0.1136,
+      "12": 0.2267,
+      "13": 0.2389,
+      "14": 0.235,
+      "15": 0.1778,
+      "16": 0.0908,
+      "17": 0.0636,
+      "18": 0.0154,
+      "19": 0.0507,
+      "20": 0.0574,
+      "21": 0.0364,
+      "22": -0.0453,
+      "23": 0.0168,
+      "24": 0.1295,
+      "25": 0.2708,
+      "26": 0.2496,
+      "27": 0.1711,
+      "28": 0.0931
+    }
+  },
+  "decision": {
+    "decision": "HOLD / DO NOT SHIP AS-IS",
+    "reasons": [
+      "Guardrail violated: support_contact_rate_7d shows a significant degradation in the treatment arm after correction."
+    ]
+  }
+}
