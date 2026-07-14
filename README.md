@@ -1,176 +1,97 @@
-# A/B Test Guardrail Metrics
+![CI](https://github.com/ArchanaChetan07/ab-test-guardrail-metrics/actions/workflows/ci.yml/badge.svg)
 
-### Decision-grade experimentation with SRM gates, pre-registered metrics, Holm correction, and mechanical ship/no-ship rules across three real case studies.
+Decision-grade A/B testing framework — SRM gates, pre-registered metrics, Holm-corrected significance, mechanical ship/no-ship rules. pandas + scipy/statsmodels, tested and Docker-reproducible.
 
-[![GitHub](https://img.shields.io/badge/repo-ab-test-guardrail-metrics-181717?logo=github)](https://github.com/ArchanaChetan07/ab-test-guardrail-metrics)
-[![Language](https://img.shields.io/badge/language-HTML-3572A5)](https://github.com/ArchanaChetan07/ab-test-guardrail-metrics)
-[![License](https://img.shields.io/badge/license-See%20repository-yellow)](https://github.com/ArchanaChetan07/ab-test-guardrail-metrics)
-[![CI](https://img.shields.io/badge/CI-check%20workflows-2088FF?logo=githubactions&logoColor=white)](https://github.com/ArchanaChetan07/ab-test-guardrail-metrics/actions)
+**Cookie Cats:** **−4.312%** relative 7-day retention (19.02% → 18.20%, n=**90,189**, SRM-clean at α=0.001, Holm-corrected) → **DO NOT SHIP** — **11 tests passing**, including a guardrail test proving **SRM failures always block shipping**.
 
----
+```bash
+docker compose up --build
+# reproduces all three case studies via the shared package (no GitHub Actions notebook run)
+```
 
 ## Overview
 
-Teams often ship A/B results after a single p-value without assignment integrity checks, guardrails, multiple-comparison correction, or a clear decision rule—especially when data shapes differ across experiments.
+This repo turns “I ran an A/B test in a notebook” into a **decision-grade** analysis path: the same tested Python package powers every case study. Experiments declare metrics in locked `configs/*.json` files, run an SRM gate, test a pre-registered primary + guardrails, apply Holm–Bonferroni, and emit a mechanical ship/no-ship decision.
 
-Shared stats toolkit (two-proportion / Welch t-tests, SRM, Holm–Bonferroni) applied consistently to Cookie Cats retention, Udacity free-trial funnel aggregates, ecommerce landing-page conversions, plus a synthetic checkout case with novelty and support-contact guardrails.
+## Why “Decision-Grade”
 
-Produces case-level results JSON, notebooks/HTML reports, and executive summaries with explicit REVERT / HOLD / DO-NOT-SHIP decisions—including a Cookie Cats retention regression and an assignment-integrity bug SRM alone would miss.
+Most portfolio A/B demos stop at a single p-value. This framework enforces three rigor signals most demos skip:
 
-This repository is maintained as **production-minded portfolio work**: clear architecture, automated checks where present, and metrics that are **traceable to committed artifacts** (never invented).
+1. **SRM gate** — chi-square goodness-of-fit of observed vs expected traffic split (default 50/50). Failures trip at **p < 0.001** (stricter than 0.05) and **always block ship**, even if metrics look great.
+2. **Pre-registration** — primary + guardrail metric names live in `configs/*.json` and are validated before results are trusted (no silent post-hoc metric adds).
+3. **Holm–Bonferroni** — family-wise correction across the pre-registered metric family at **α = 0.05** via `statsmodels.stats.multitest.multipletests(..., method="holm")`.
 
----
+## Package Architecture
 
-## Architecture
-
-Case CSV → quality/SRM gates → primary + guardrail tests (Holm) → novelty checks → decision JSON → notebook/HTML/executive summary
-
-```mermaid
-flowchart LR
-  A[Experiment CSV] --> B[SRM / DQ gates]
-  B --> C[Primary metric test]
-  B --> D[Guardrail tests]
-  C --> E[Holm correction]
-  D --> E
-  E --> F[Ship / Hold / Revert]
-  F --> G[results.json + reports]
-```
-
-```mermaid
-sequenceDiagram
-  participant U as User/Client
-  participant S as Service/Pipeline
-  participant E as Eval/Tools
-  U->>S: request / job
-  S->>E: execute
-  E-->>S: results
-  S-->>U: report / response
-```
-
----
-
-## Results & repository facts
-
-> Only values found in code, configs, tests, or generated reports are listed. Absence of a clinical/ML accuracy number means it was **not** published in-repo.
-
-| Metric | Value | Source |
-|---|---|---|
-| Cookie Cats users (control + treatment) | **90,189** | `case_studies/cookie_cats/reports/results.json` |
-| Cookie Cats 7-day retention (control → treatment) | **19.02% → 18.20% (rel −4.312%)** | `case_studies/cookie_cats/reports/results.json` |
-| Cookie Cats retention_7 Holm-adjusted p-value | **0.004663** | `case_studies/cookie_cats/reports/results.json` |
-| Cookie Cats decision | **DO NOT SHIP — REVERT TO GATE AT LEVEL 30** | `case_studies/cookie_cats/reports/results.json` |
-| Udacity gross conversion relative change | **−9.391%** | `case_studies/udacity_funnel/reports/results.json` |
-| Udacity evaluation window | **23 days** | `case_studies/udacity_funnel/reports/results.json` |
-| Udacity decision | **INCONCLUSIVE — HOLD** | `case_studies/udacity_funnel/reports/results.json` |
-| Ecommerce raw rows | **294,478** | `case_studies/website_conversion/reports/results.json` |
-| Ecommerce mismatched group/page rows | **3,893 (1.322%)** | `case_studies/website_conversion/reports/results.json` |
-| Ecommerce conversion p-value (post-clean) | **0.190** | `case_studies/website_conversion/reports/results.json` |
-| Synthetic checkout relative lift | **+9.098%** | `reports/analysis_results.json` |
-| Synthetic checkout decision | **HOLD / DO NOT SHIP AS-IS (support_contact_rate_7d guardrail)** | `reports/analysis_results.json` |
-| Tracked files | **40** | `git tree` |
-| Python modules | **10** | `git tree` |
-| Test-related paths | **0** | `git tree` |
-| CI workflows | **No** | `.github/workflows` |
-| Docker present | **No** | `repo root` |
-
-```mermaid
-xychart-beta
-    title "Reported percentage metrics (from repo artifacts)"
-    x-axis ["Cookie Cats 7-day retention ", "Udacity gross conversion rel", "Ecommerce mismatched group/p", "Synthetic checkout relative "]
-    y-axis "Percent" 0 --> 100
-    bar [19.02, 9.391, 1.322, 9.098]
-```
-
-```mermaid
-%%{init: {'theme':'base'}}%%
-pie showData title Language composition (bytes)
-    "HTML" : 79
-    "Jupyter Notebook" : 17
-    "Python" : 4
-```
-
----
-
-## Key features
-
-- Sample Ratio Mismatch (SRM) checks with configurable thresholds
-- Pre-specified primary metrics and guardrail metrics
-- Holm–Bonferroni multiple-comparisons correction
-- Novelty / early-vs-late lift diagnostics
-- Mechanical ship / hold / revert decision objects in results JSON
-- Three real independently sourced experiments + one synthetic checkout study
-
----
-
-## Tech stack
-
-| Layer | Technology |
+| Module | Role |
 |---|---|
-| language | Python |
-| analytics | pandas |
-| stats | shared/stats_toolkit.py |
-| notebooks | Jupyter |
-| reporting | JSON + Markdown + PNG |
+| `abtest_guardrails/srm.py` | `srm_check_counts` — χ² GoF SRM check |
+| `abtest_guardrails/metrics.py` | Pre-registration load/validate, z-test, Welch t-test |
+| `abtest_guardrails/corrections.py` | Holm–Bonferroni family correction |
+| `abtest_guardrails/decision.py` | Mechanical ship rule (**SRM hard-blocks**) |
+| `configs/*.json` | Locked metric registries per case study |
 
----
+Case-study scripts under `case_studies/*/analysis.py` import this package (no duplicated stats logic).
 
-## Skills demonstrated
+## Case Studies
 
-HTML · pandas · scipy/stats toolkit · Jupyter · CI/CD · testing · automation
+Numbers below were re-run in this session against the checked-in CSVs.
 
-Keyword surface: **Python · HTML · machine-learning · CI/CD · testing · API · Docker · automation · data-science · software-engineering · system-design · observability · LLM · cloud**
+| Study | n / window | Headline | Decision |
+|---|---|---|---|
+| **Cookie Cats** gate placement | **90,189** users | 7-day retention **19.02% → 18.20%** (**−4.312%** rel.), Holm p≈0.0047 | **DO NOT SHIP** (significant regression) |
+| **Udacity** free-trial screener | **23**-day eval window (daily aggregates) | Gross conversion **−9.391%** rel. (Holm sig.); net conversion NS | **INCONCLUSIVE — HOLD** |
+| **Website** landing page | **294,478** raw → **290,584** clean | Conversion **−1.311%** rel., p≈0.190; SRM clean but **group/page mismatch** gate failed pre-clean | **DO NOT SHIP** |
 
----
+## Guardrail Design
 
-## Project structure
+`decide_ship(..., srm_detected=True)` always returns `ship=False` / `srm_blocked=True`, ignoring primary significance.
 
-```text
-ab-test-guardrail-metrics/
-├── shared/stats_toolkit.py
-├── case_studies/{cookie_cats,udacity_funnel,website_conversion}/
-│   ├── analysis.py
-│   ├── notebooks/
-│   └── reports/results.json
-├── scripts/
-├── notebooks/
-├── data/
-└── reports/
-```
+**Proof:** `tests/test_guardrails.py::TestShipDecision::test_srm_failure_always_blocks_ship`.
 
----
+## How to Run
 
-## Installation & usage
+### Docker (case-study reproduction)
 
 ```bash
-git clone https://github.com/ArchanaChetan07/ab-test-guardrail-metrics.git
-cd ab-test-guardrail-metrics
-pip install pandas numpy scipy matplotlib jupyter
-python case_studies/cookie_cats/analysis.py
+docker compose up --build
+# writes artifacts/case_study_summary.json
 ```
 
----
+Package tests in Docker:
 
-## How it works
+```bash
+docker compose --profile test run --rm tests
+```
 
-Each case study loads real or provided CSVs, runs shared statistical helpers for SRM and inference, writes machine-readable `results.json`, and regenerates notebooks/HTML plus executive Markdown so the same decision standard applies across user-level Boolean, daily funnel-count, and landing-page designs.
+### Local
 
----
+```bash
+python -m venv .venv
+# Windows: .\.venv\Scripts\activate
+pip install -r requirements.txt
+set PYTHONPATH=.
+pytest tests/ -v
+python scripts/run_case_studies.py
+```
 
-## Future improvements
+Notebook HTML exports remain under `case_studies/*/notebooks/` and root `notebooks/` for reading; **full notebook `nbconvert` re-execution is a local/Docker step, not part of GitHub Actions CI**.
 
-- Add CI workflow and unit tests around stats_toolkit
-- Package as installable library with a single CLI entrypoint
-- Support CUPED / variance reduction and sequential testing
+## Tests
 
----
+```bash
+pytest tests/ -v
+```
+
+**11 passed** in this session (SRM balanced/mismatch/near-threshold, Holm vs statsmodels, ship rules including SRM hard-block, pre-registration validation).
+
+## Tech Stack
+
+- Python 3.11
+- pandas, numpy, scipy, statsmodels
+- pytest + GitHub Actions (package tests only)
+- Docker / Compose for case-study reproduction
 
 ## License
 
-See repository.
-
----
-
-<p align="center">
-  <b>A/B Test Guardrail Metrics</b><br/>
-  <a href="https://github.com/ArchanaChetan07/ab-test-guardrail-metrics">github.com/ArchanaChetan07/ab-test-guardrail-metrics</a>
-</p>
+See repository license file if present.
