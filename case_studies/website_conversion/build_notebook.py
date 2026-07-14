@@ -1,3 +1,4 @@
+import os
 import nbformat as nbf
 
 nb = nbf.v4.new_notebook()
@@ -163,6 +164,6 @@ grounds. This matches the real, widely-cited conclusion for this dataset.
 """)
 
 nb['cells'] = cells
-with open('/home/claude/ab_test_project/case_studies/website_conversion/notebooks/website_conversion_analysis.ipynb', 'w') as f:
+with open(os.path.join(os.path.dirname(__file__), 'notebooks', 'website_conversion_analysis.ipynb', 'w') as f:
     nbf.write(nb, f)
 print("done")

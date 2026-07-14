@@ -1,0 +1,17 @@
+{
+  "cookie_cats": {
+    "decision": "DO NOT SHIP \u2014 REVERT TO GATE AT LEVEL 30",
+    "relative_diff_pct": -4.312,
+    "n_users": 90189
+  },
+  "udacity_funnel": {
+    "decision": "INCONCLUSIVE \u2014 HOLD (gross conversion effect confirmed, net conversion effect unresolved)",
+    "relative_diff_pct": -9.391,
+    "n_users": null
+  },
+  "website_conversion": {
+    "decision": "DO NOT SHIP \u2014 keep old page",
+    "relative_diff_pct": -1.311,
+    "n_users": 294478
+  }
+}

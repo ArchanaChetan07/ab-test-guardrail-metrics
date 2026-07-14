@@ -1,3 +1,4 @@
+import os
 import nbformat as nbf
 
 nb = nbf.v4.new_notebook()
@@ -146,6 +147,6 @@ game to keep them coming back.
 """)
 
 nb['cells'] = cells
-with open('/home/claude/ab_test_project/case_studies/cookie_cats/notebooks/cookie_cats_analysis.ipynb', 'w') as f:
+with open(os.path.join(os.path.dirname(__file__), 'notebooks', 'cookie_cats_analysis.ipynb', 'w') as f:
     nbf.write(nb, f)
 print("done")
