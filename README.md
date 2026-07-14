@@ -1,8 +1,20 @@
 ![CI](https://github.com/ArchanaChetan07/ab-test-guardrail-metrics/actions/workflows/ci.yml/badge.svg)
 
-Decision-grade A/B testing framework — SRM gates, pre-registered metrics, Holm-corrected significance, mechanical ship/no-ship rules. pandas + scipy/statsmodels, tested and Docker-reproducible.
+# Production-Grade A/B Test Guardrails
 
-**Cookie Cats:** **−4.312%** relative 7-day retention (19.02% → 18.20%, n=**90,189**, SRM-clean at α=0.001, Holm-corrected) → **DO NOT SHIP** — **11 tests passing**, including a guardrail test proving **SRM failures always block shipping**.
+Decision-grade A/B testing with SRM/data-quality gates, pre-registered metrics, Holm-corrected significance, and mechanical decision rules. The same tested pipeline is applied to three real, independently sourced experiments—none of the underlying experiment data is simulated.
+
+## Three Real Experiments, Three Different Failure Modes
+
+| Case study | Primary metric (treatment vs. control) | Relative difference | `n_users` / exact analysis denominator | Decision | Evidence |
+|---|---|---:|---|---|---|
+| **Cookie Cats** gate placement | 7-day retention: 18.20% vs. 19.02% | **−4.312%** | **90,189 randomized users** | **DO NOT SHIP — REVERT TO GATE AT LEVEL 30** (significant regression; Holm-adjusted p=0.004663) | [results.json](case_studies/cookie_cats/reports/results.json) · [report](case_studies/cookie_cats/notebooks/cookie_cats_analysis.html) |
+| **Udacity** free-trial screener | Gross conversion: 19.832% vs. 21.887% | **−9.391%** | **`n_users` unavailable**: public data are daily aggregates; primary denominator is **34,553 Start Free Trial clicks** across the 23-day evaluation window | **INCONCLUSIVE — HOLD** (net conversion effect unresolved) | [results.json](case_studies/udacity_funnel/reports/results.json) · [report](case_studies/udacity_funnel/notebooks/udacity_funnel_analysis.html) |
+| **Website** landing page | Conversion: 11.881% vs. 12.039% | **−1.311%** | **294,478 raw rows → 290,584 cleaned users** used for the primary metric | **DO NOT SHIP — keep old page** (no evidence of improvement; assignment bug detected) | [results.json](case_studies/website_conversion/reports/results.json) · [report](case_studies/website_conversion/notebooks/website_conversion_analysis.html) |
+
+Cookie Cats catches a statistically significant regression. Udacity preserves the honest answer—**“we don't know yet”**—because paying-customer impact remains unresolved. The website study catches **3,893 group/page mismatches (1.322%)** even though raw traffic passes SRM (p=0.892), demonstrating a data-quality bug SRM alone cannot detect. Together, the two user-level datasets contain **384,667 raw records**, while Udacity is correctly reported using its aggregate metric denominator rather than a fabricated user count.
+
+**11/11 tests pass**, including Holm correction against the statsmodels reference and a guardrail test proving SRM failures always block shipping.
 
 ```bash
 docker compose up --build
@@ -32,16 +44,6 @@ Most portfolio A/B demos stop at a single p-value. This framework enforces three
 | `configs/*.json` | Locked metric registries per case study |
 
 Case-study scripts under `case_studies/*/analysis.py` import this package (no duplicated stats logic).
-
-## Case Studies
-
-Numbers below were re-run in this session against the checked-in CSVs.
-
-| Study | n / window | Headline | Decision |
-|---|---|---|---|
-| **Cookie Cats** gate placement | **90,189** users | 7-day retention **19.02% → 18.20%** (**−4.312%** rel.), Holm p≈0.0047 | **DO NOT SHIP** (significant regression) |
-| **Udacity** free-trial screener | **23**-day eval window (daily aggregates) | Gross conversion **−9.391%** rel. (Holm sig.); net conversion NS | **INCONCLUSIVE — HOLD** |
-| **Website** landing page | **294,478** raw → **290,584** clean | Conversion **−1.311%** rel., p≈0.190; SRM clean but **group/page mismatch** gate failed pre-clean | **DO NOT SHIP** |
 
 ## Guardrail Design
 
