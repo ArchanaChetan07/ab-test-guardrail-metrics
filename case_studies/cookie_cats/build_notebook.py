@@ -16,10 +16,18 @@ improving retention without just being a transparent monetization delay tactic.
 """)
 
 code("""import sys
-sys.path.append('../../../shared')
+from pathlib import Path
+ROOT = Path('../..').resolve().parent if False else Path('../../..').resolve()
+# Notebook CWD is case_studies/cookie_cats/notebooks → repo root is ../../..
+import os
+ROOT = os.path.abspath(os.path.join(os.getcwd(), '..', '..', '..'))
+if ROOT not in sys.path:
+    sys.path.insert(0, ROOT)
 import pandas as pd
 import matplotlib.pyplot as plt
-from stats_toolkit import srm_check_counts, two_proportion_ztest, welch_ttest, holm_bonferroni
+from abtest_guardrails import (
+    srm_check_counts, two_proportion_ztest, welch_ttest, holm_bonferroni, decide_ship,
+)
 
 plt.rcParams['figure.figsize'] = (8, 4)
 df = pd.read_csv('../cookie_cats.csv')

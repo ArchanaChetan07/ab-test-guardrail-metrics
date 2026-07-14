@@ -1,27 +1,30 @@
 {
+  "preregistration": "udacity_free_trial_screener",
   "invariant_checks": {
     "pageviews_srm": {
       "n_control": 345543,
       "n_treatment": 344660,
+      "n_total": 690203,
       "observed_ratio_treatment": 0.49936,
       "expected_ratio_treatment": 0.5,
       "chi2_statistic": 1.1297,
       "p_value": 0.2878496417065941,
-      "srm_detected": "False",
+      "srm_detected": false,
       "threshold": 0.001
     },
     "clicks_srm": {
       "n_control": 28378,
       "n_treatment": 28325,
+      "n_total": 56703,
       "observed_ratio_treatment": 0.49953,
       "expected_ratio_treatment": 0.5,
       "chi2_statistic": 0.0495,
       "p_value": 0.8238677039815409,
-      "srm_detected": "False",
+      "srm_detected": false,
       "threshold": 0.001
     }
   },
-  "srm_detected": "False",
+  "srm_detected": false,
   "evaluation_window_days": 23,
   "primary_metric": {
     "metric": "gross_conversion_primary",
@@ -61,6 +64,8 @@
       "Gross conversion decreased significantly as intended (filtering out low-commitment enrollments).",
       "Net conversion point estimate also decreased but was NOT statistically significant after correction \u2014 however the confidence interval is wide enough that a real negative effect on paying customers cannot be ruled out.",
       "Recommendation: this is a genuine 'insufficient evidence' case, not a clean ship or no-ship. Extend the test or run a follow-up with a tighter practical-significance boundary on net conversion before launching broadly."
-    ]
+    ],
+    "srm_blocked": false,
+    "ship": false
   }
 }

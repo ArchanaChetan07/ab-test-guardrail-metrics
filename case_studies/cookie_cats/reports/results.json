@@ -1,4 +1,6 @@
 {
+  "n_users": 90189,
+  "preregistration": "cookie_cats_gate_placement",
   "data_quality_note": {
     "outlier_rows_removed_for_engagement_metric": 1,
     "reason": "sum_gamerounds=49,854 for a single user is >5,700x the median and consistent with a known bot/logging artifact; excluded only from the engagement (game rounds) guardrail calculation."
@@ -6,11 +8,12 @@
   "srm_check": {
     "n_control": 44700,
     "n_treatment": 45489,
+    "n_total": 90189,
     "observed_ratio_treatment": 0.50437,
     "expected_ratio_treatment": 0.5,
     "chi2_statistic": 6.9024,
     "p_value": 0.008607987810836262,
-    "srm_detected": "False",
+    "srm_detected": false,
     "threshold": 0.001
   },
   "primary_metric": {
@@ -60,6 +63,8 @@
     "decision": "DO NOT SHIP \u2014 REVERT TO GATE AT LEVEL 30",
     "reasons": [
       "Primary metric (7-day retention) moved in the WRONG direction (treatment lower than control) and is statistically significant \u2014 this is a significant regression, not just a null result."
-    ]
+    ],
+    "srm_blocked": false,
+    "ship": false
   }
 }

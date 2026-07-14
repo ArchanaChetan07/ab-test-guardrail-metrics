@@ -1,13 +1,15 @@
 {
   "raw_rows": 294478,
+  "preregistration": "website_landing_page_conversion",
   "srm_check_raw_group_sizes": {
     "n_control": 147202,
     "n_treatment": 147276,
+    "n_total": 294478,
     "observed_ratio_treatment": 0.50013,
     "expected_ratio_treatment": 0.5,
     "chi2_statistic": 0.0186,
     "p_value": 0.8915321515063552,
-    "srm_detected": "False",
+    "srm_detected": false,
     "threshold": 0.001
   },
   "data_quality_gate": {
@@ -15,7 +17,7 @@
     "mismatched_pct": 1.322,
     "rows_involved_in_duplicate_user_ids": 7788,
     "verdict": "FAIL \u2014 group/page assignment logging bug detected; SRM on raw counts alone would have missed this.",
-    "action_taken": "Removed all mismatched rows, then dropped any remaining duplicate user_id (kept first occurrence). This is a data-cleaning decision made BEFORE looking at the conversion outcome, based purely on assignment integrity, to avoid the appearance of cherry-picking rows that support a particular result."
+    "action_taken": "Removed all mismatched rows, then dropped any remaining duplicate user_id (kept first occurrence). Cleaning decision made BEFORE looking at the conversion outcome."
   },
   "clean_rows": 290584,
   "rows_dropped_total": 3894,
@@ -23,11 +25,12 @@
   "srm_check_post_cleaning": {
     "n_control": 145274,
     "n_treatment": 145310,
+    "n_total": 290584,
     "observed_ratio_treatment": 0.50006,
     "expected_ratio_treatment": 0.5,
     "chi2_statistic": 0.0045,
     "p_value": 0.9467543681597944,
-    "srm_detected": "False",
+    "srm_detected": false,
     "threshold": 0.001
   },
   "primary_metric": {
@@ -41,7 +44,9 @@
       0.00078
     ],
     "z_stat": -1.3109,
-    "p_value": 0.18988337448195103
+    "p_value": 0.18988337448195103,
+    "p_value_holm_adjusted": 0.189883,
+    "significant_after_correction": false
   },
   "guardrails": "None available \u2014 dataset does not include revenue, refund, or support-contact fields. Documented as a limitation rather than fabricating a guardrail from data that doesn't exist.",
   "daily_relative_lift": {
@@ -73,6 +78,8 @@
     "decision": "DO NOT SHIP \u2014 keep old page",
     "reasons": [
       "Conversion rate difference not statistically significant (p=0.190), and the point estimate is actually slightly NEGATIVE for the new page. No evidence the redesign helps."
-    ]
+    ],
+    "srm_blocked": false,
+    "ship": false
   }
 }

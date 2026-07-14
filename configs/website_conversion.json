@@ -1,0 +1,14 @@
+{
+  "experiment": "website_landing_page_conversion",
+  "locked_before_analysis": true,
+  "alpha": 0.05,
+  "srm_threshold": 0.001,
+  "expected_split": 0.5,
+  "primary_metric": {
+    "name": "conversion_rate_primary",
+    "type": "proportion",
+    "desired_direction": "positive",
+    "description": "Purchase/signup conversion after assignment integrity cleaning"
+  },
+  "guardrail_metrics": []
+}

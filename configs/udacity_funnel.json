@@ -1,0 +1,20 @@
+{
+  "experiment": "udacity_free_trial_screener",
+  "locked_before_analysis": true,
+  "alpha": 0.05,
+  "srm_threshold": 0.001,
+  "expected_split": 0.5,
+  "primary_metric": {
+    "name": "gross_conversion_primary",
+    "type": "proportion",
+    "desired_direction": "negative",
+    "description": "Enrollments/clicks; intended decrease filters low-commitment enrollments"
+  },
+  "guardrail_metrics": [
+    {
+      "name": "net_conversion_guardrail",
+      "type": "proportion",
+      "description": "Payments/clicks must not significantly decrease"
+    }
+  ]
+}

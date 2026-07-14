@@ -21,11 +21,13 @@ contamination** — a second, unit-level integrity check is needed and is
 often skipped in portfolios that only check SRM.
 """)
 
-code("""import sys
-sys.path.append('../../../shared')
+code("""import sys, os
+ROOT = os.path.abspath(os.path.join(os.getcwd(), '..', '..', '..'))
+if ROOT not in sys.path:
+    sys.path.insert(0, ROOT)
 import pandas as pd
 import matplotlib.pyplot as plt
-from stats_toolkit import srm_check_counts, two_proportion_ztest
+from abtest_guardrails import srm_check_counts, two_proportion_ztest, decide_ship
 
 plt.rcParams['figure.figsize'] = (8, 4)
 df = pd.read_csv('../ab_data.csv', parse_dates=['timestamp'])

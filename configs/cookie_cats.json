@@ -1,0 +1,25 @@
+{
+  "experiment": "cookie_cats_gate_placement",
+  "locked_before_analysis": true,
+  "alpha": 0.05,
+  "srm_threshold": 0.001,
+  "expected_split": 0.5,
+  "primary_metric": {
+    "name": "retention_7_primary",
+    "type": "proportion",
+    "desired_direction": "positive",
+    "description": "7-day retention; business goal is long-run engagement after moving gate to level 40"
+  },
+  "guardrail_metrics": [
+    {
+      "name": "retention_1_guardrail",
+      "type": "proportion",
+      "description": "1-day retention must not significantly regress"
+    },
+    {
+      "name": "game_rounds_guardrail",
+      "type": "continuous",
+      "description": "Mean game rounds (Welch); must not significantly regress"
+    }
+  ]
+}

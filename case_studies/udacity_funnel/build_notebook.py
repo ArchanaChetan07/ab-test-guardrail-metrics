@@ -23,11 +23,13 @@ show the same rigor (SRM, guardrails, correction) applies regardless of
 data granularity.
 """)
 
-code("""import sys
-sys.path.append('../../../shared')
+code("""import sys, os
+ROOT = os.path.abspath(os.path.join(os.getcwd(), '..', '..', '..'))
+if ROOT not in sys.path:
+    sys.path.insert(0, ROOT)
 import pandas as pd
 import matplotlib.pyplot as plt
-from stats_toolkit import srm_check_counts, two_proportion_ztest, holm_bonferroni
+from abtest_guardrails import srm_check_counts, two_proportion_ztest, holm_bonferroni, decide_ship
 
 plt.rcParams['figure.figsize'] = (9, 4)
 control = pd.read_csv('../udacity_control.csv')
