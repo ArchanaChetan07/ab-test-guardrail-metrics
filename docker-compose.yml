@@ -1,0 +1,16 @@
+services:
+  case-studies:
+    build: .
+    environment:
+      PYTHONPATH: /app
+    volumes:
+      - ./artifacts:/app/artifacts
+      - ./case_studies:/app/case_studies
+    command: ["python", "scripts/run_case_studies.py"]
+
+  tests:
+    build: .
+    profiles: ["test"]
+    environment:
+      PYTHONPATH: /app
+    command: ["pytest", "tests/", "-v", "--tb=short"]
